@@ -3,3 +3,12 @@ target
 .DS_Store
 local-config.json
 .vscode/
+
+# Development and testing files (not for production)
+.env.test
+AGENTS.md
+dev-testing/
+*.test.rs
+*_test_*.rs
+demo-*.rs
+example-*.rs

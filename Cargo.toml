@@ -5,6 +5,7 @@ members = [
     "bridge-sdk/eth-proof",
     "bridge-sdk/near-rpc-client",
     "bridge-sdk/bridge-clients/solana-bridge-client",
+    "bridge-sdk/bridge-clients/solana-optimistic-poc-client",
     "bridge-sdk/bridge-clients/near-bridge-client",
     "bridge-sdk/bridge-clients/evm-bridge-client",
     "bridge-sdk/bridge-clients/wormhole-bridge-client",
