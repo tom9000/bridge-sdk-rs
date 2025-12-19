@@ -652,8 +652,7 @@ impl NearBridgeClient {
             Ok((fee, native_fee))
         } else {
             Err(BridgeSdkError::ConfigError(
-                "Bridge indexer API URL is not configured; provide it or specify fees explicitly"
-                    .to_string(),
+                "Bridge indexer API URL is not configured; provide it or specify fees".to_string(),
             ))
         }
     }
