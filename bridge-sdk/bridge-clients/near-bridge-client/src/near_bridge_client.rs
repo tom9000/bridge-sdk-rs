@@ -617,7 +617,7 @@ impl NearBridgeClient {
                 .build()
                 .map_err(|e| BridgeSdkError::UnknownError(e.to_string()))?;
             let response = client
-                .get(format!("{}/api/v1/transfer-fee", api_url))
+                .get(format!("{}/api/v3/transfer-fee", api_url))
                 .query(&[
                     ("sender", sender.to_string()),
                     ("recipient", recipient.to_string()),
@@ -651,8 +651,10 @@ impl NearBridgeClient {
 
             Ok((fee, native_fee))
         } else {
-            // Fallback if no API URL is configured (e.g. tests or user choice)
-            Ok((0, 0))
+            Err(BridgeSdkError::ConfigError(
+                "Bridge indexer API URL is not configured; provide it or specify fees explicitly"
+                    .to_string(),
+            ))
         }
     }
 
@@ -689,7 +691,9 @@ impl NearBridgeClient {
         };
 
         if amount == 0 {
-            tracing::warn!("Transfer amount is 0. Ensure this is intended.");
+            return Err(BridgeSdkError::ConfigError(
+                "Transfer amount must be greater than 0".to_string(),
+            ));
         }
 
         if fee == 0 && native_fee == 0 {
@@ -1077,7 +1081,7 @@ mod tests {
 
         let mock = server.mock(|when, then| {
             when.method(GET)
-                .path("/api/v1/transfer-fee")
+                .path("/api/v3/transfer-fee")
                 .query_param("sender", "near:alice.near")
                 .query_param("recipient", "near:bob.near")
                 .query_param("token", "near:wrap.near");

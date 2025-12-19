@@ -301,7 +301,7 @@ fn default_config(network: Network) -> CliConfig {
             eth_light_client_id: Some(defaults::ETH_LIGHT_CLIENT_ID_MAINNET.to_owned()),
             btc_light_client_id: Some(defaults::BTC_LIGHT_CLIENT_ID_MAINNET.to_owned()),
             zcash_light_client_id: Some(defaults::ZCASH_LIGHT_CLIENT_ID_MAINNET.to_owned()),
-            bridge_indexer_api_url: None,
+            bridge_indexer_api_url: Some("https://mainnet.api.bridge.nearone.org/".to_owned()),
 
             eth_rpc: Some(defaults::ETH_RPC_MAINNET.to_owned()),
             eth_chain_id: Some(defaults::ETH_CHAIN_ID_MAINNET),
@@ -377,7 +377,7 @@ fn default_config(network: Network) -> CliConfig {
             eth_light_client_id: Some(defaults::ETH_LIGHT_CLIENT_ID_TESTNET.to_owned()),
             btc_light_client_id: Some(defaults::BTC_LIGHT_CLIENT_ID_TESTNET.to_owned()),
             zcash_light_client_id: Some(defaults::ZCASH_LIGHT_CLIENT_ID_TESTNET.to_owned()),
-            bridge_indexer_api_url: None,
+            bridge_indexer_api_url: Some("https://testnet.api.bridge.nearone.org/".to_owned()),
 
             eth_rpc: Some(defaults::ETH_RPC_TESTNET.to_owned()),
             eth_chain_id: Some(defaults::ETH_CHAIN_ID_TESTNET),
@@ -453,7 +453,7 @@ fn default_config(network: Network) -> CliConfig {
             eth_light_client_id: Some(defaults::ETH_LIGHT_CLIENT_ID_DEVNET.to_owned()),
             btc_light_client_id: Some(defaults::BTC_LIGHT_CLIENT_ID_DEVNET.to_owned()),
             zcash_light_client_id: Some(defaults::ZCASH_LIGHT_CLIENT_ID_DEVNET.to_owned()),
-            bridge_indexer_api_url: None,
+            bridge_indexer_api_url: Some("https://testnet.api.bridge.nearone.org/".to_owned()),
 
             eth_rpc: Some(defaults::ETH_RPC_DEVNET.to_owned()),
             eth_chain_id: Some(defaults::ETH_CHAIN_ID_DEVNET),
