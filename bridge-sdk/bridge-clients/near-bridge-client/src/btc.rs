@@ -180,7 +180,7 @@ pub struct NearToBtcTransferInfo {
 }
 
 #[derive(Debug, PartialEq, serde::Deserialize, serde::Serialize)]
-enum UTXOChainMsg {
+pub enum UTXOChainMsg {
     MaxGasFee(U64),
 }
 

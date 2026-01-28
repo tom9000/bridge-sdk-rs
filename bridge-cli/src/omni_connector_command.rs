@@ -7,7 +7,8 @@ use alloy::primitives::{Address as EvmH160, TxHash};
 use alloy::signers::local::PrivateKeySigner;
 use evm_bridge_client::EvmBridgeClientBuilder;
 use light_client::LightClientBuilder;
-use near_bridge_client::{NearBridgeClientBuilder, TransactionOptions, UTXOChainAccounts};
+use near_bridge_client::{btc::UTXOChainMsg, NearBridgeClientBuilder, TransactionOptions, UTXOChainAccounts};
+use near_sdk::json_types::U64;
 use near_primitives::{hash::CryptoHash, types::AccountId};
 use omni_connector::{
     BindTokenArgs, BtcDepositArgs, DeployTokenArgs, FinTransferArgs, InitTransferArgs,
@@ -769,7 +770,8 @@ pub async fn match_subcommand(cmd: OmniConnectorSubCommand, network: Network) {
                 && matches!(recipient.get_chain(), ChainKind::Btc | ChainKind::Zcash)
             {
                 if let Some(gas_fee) = gas_fee {
-                    message = format!("{{\"MaxGasFee\": \"{gas_fee}\"}}");
+                    message = serde_json::to_string(&UTXOChainMsg::MaxGasFee(U64::from(gas_fee as u64)))
+                        .expect("Failed to serialize UTXOChainMsg");
                 }
             }
 
