@@ -564,6 +564,15 @@ pub enum OmniConnectorSubCommand {
         #[command(flatten)]
         config_cli: CliConfig,
     },
+    #[clap(about = "Get withdraw fee for a given amount")]
+    GetWithdrawFee {
+        #[clap(short, long, help = "Chain for the UTXO rebalancing (Bitcoin/Zcash)")]
+        chain: UTXOChainArg,
+        #[clap(short, long, help = "Amount to withdraw")]
+        amount: u128,
+        #[command(flatten)]
+        config_cli: CliConfig,
+    },
     #[clap(about = "Commands for internal usage, not recommended for the public")]
     Internal {
         #[command(subcommand)]
@@ -593,6 +602,17 @@ pub enum InternalSubCommand {
 #[allow(clippy::too_many_lines)]
 pub async fn match_subcommand(cmd: OmniConnectorSubCommand, network: Network) {
     match cmd {
+        OmniConnectorSubCommand::GetWithdrawFee {
+            chain,
+            amount,
+            config_cli,
+        } => {
+            let fee = omni_connector(network, config_cli)
+                .get_withdraw_fee_for_amount(chain.into(), amount)
+                .await
+                .unwrap();
+            println!("{fee}");
+        }
         OmniConnectorSubCommand::LogMetadata { token, config_cli } => {
             omni_connector(network, config_cli)
                 .log_metadata(token, TransactionOptions::default())
