@@ -149,6 +149,15 @@ struct WithdrawBridgeFee {
     protocol_fee_rate: u64,
 }
 
+impl WithdrawBridgeFee {
+    pub fn get_fee(&self, amount: u128) -> u128 {
+        std::cmp::max(
+            amount * u128::from(self.fee_rate) / u128::from(MAX_RATIO),
+            self.fee_min,
+        )
+    }
+}
+
 #[serde_as]
 #[derive(Clone, serde::Serialize, serde::Deserialize)]
 struct PartialConfig {
@@ -672,6 +681,15 @@ impl NearBridgeClient {
     pub async fn get_withdraw_fee(&self, chain: ChainKind) -> Result<u128> {
         let config = self.get_config(chain).await?;
         Ok(config.withdraw_bridge_fee.fee_min)
+    }
+
+    pub async fn get_withdraw_fee_for_amount(
+        &self,
+        chain: ChainKind,
+        amount: u128,
+    ) -> Result<u128> {
+        let config = self.get_config(chain).await?;
+        Ok(config.withdraw_bridge_fee.get_fee(amount))
     }
 
     pub async fn get_change_address(&self, chain: ChainKind) -> Result<String> {

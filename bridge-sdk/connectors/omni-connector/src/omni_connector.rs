@@ -616,6 +616,17 @@ impl OmniConnector {
             .await
     }
 
+    pub async fn get_withdraw_fee_for_amount(
+        &self,
+        chain: ChainKind,
+        amount: u128,
+    ) -> Result<u128> {
+        let near_bridge_client = self.near_bridge_client()?;
+        near_bridge_client
+            .get_withdraw_fee_for_amount(chain, amount)
+            .await
+    }
+
     pub async fn active_utxo_management(
         &self,
         chain: ChainKind,
