@@ -355,7 +355,7 @@ pub enum OmniConnectorSubCommand {
         fee: Option<u128>,
         #[clap(short, long, help = "Native fee to charge for the transfer")]
         native_fee: Option<u64>,
-        #[clap(short = 'm', long, help = "Additional message (JSON format, e.g. '{\"MaxGasFee\": \"400\"}' for BTC transfers)")]
+        #[clap(short, long, help = "Additional message (JSON format, e.g. '{\"MaxGasFee\": \"400\"}' for BTC transfers)")]
         message: Option<String>,
         #[command(flatten)]
         config_cli: CliConfig,
