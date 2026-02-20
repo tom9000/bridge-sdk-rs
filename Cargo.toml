@@ -19,12 +19,12 @@ sha3 = "0.10.8"
 sha2 = "0.10.8"
 bitcoincore-rpc = "0.19.0"
 bitcoin = { version = "0.32.5", features = ["serde"] }
-borsh = "1.5.1"
+borsh = "1.6.0"
 thiserror = "2.0.3"
 alloy = { version = "1.1", features = ["full"] }
 k256 = "0.13"
 ethereum-types = "0.14.1"
-tokio = { version = "1.38.0", features = ["full"]}
+tokio = { version = "1.38.0", features = ["full"] }
 serde = { version = "1.0" }
 hex = "0.4.3"
 serde_json = "1.0.117"
@@ -48,7 +48,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 base64 = "0.22"
 near-token = "0.3"
 near-contract-standards = "5.5"
-omni-types = { git = "https://github.com/near-one/omni-bridge", package = "omni-types", rev = "57572b3fe5db1ab29857005703a3ea89fed97fa5" }
+omni-types = { git = "https://github.com/near-one/omni-bridge", package = "omni-types", rev = "45eafec9aee38167cb631db259ef0be0ff207576" }
 serde_with = "3.12.0"
 solana-sdk = "2.0.13"
 solana-client = "2.0.13"
@@ -60,7 +60,16 @@ spl-associated-token-account = { version = "6.0.0", features = ["no-entrypoint"]
 mpl-token-metadata = "5.1.0"
 crypto-shared = { git = "https://github.com/near-one/mpc", package = "crypto-shared", rev = "463172481597ee09b12020b72c61d6b01da7b167" }
 openssl-sys = { version = "*", features = ["vendored"] }
-light-client =  { path = "bridge-sdk/light-client" }
+light-client = { path = "bridge-sdk/light-client" }
+zcash_primitives = { git = "https://github.com/Near-One/librustzcash", rev = "e6a9772c71c928c7b507c6b18e2ae0adea5c325b", default-features = false, features = ["circuits", "test-dependencies", "transparent-inputs"] }
+zcash_transparent = { git = "https://github.com/Near-One/librustzcash", rev = "e6a9772c71c928c7b507c6b18e2ae0adea5c325b", features = ["transparent-inputs"] }
+zcash_protocol = { git = "https://github.com/Near-One/librustzcash", rev = "e6a9772c71c928c7b507c6b18e2ae0adea5c325b" }
+pczt = { git = "https://github.com/Near-One/librustzcash", rev = "e6a9772c71c928c7b507c6b18e2ae0adea5c325b", features = ["std", "signer", "io-finalizer", "prover", "signer", "tx-extractor", "spend-finalizer", "zcp-builder"] }
+zcash_address = { git = "https://github.com/Near-One/librustzcash", rev = "e6a9772c71c928c7b507c6b18e2ae0adea5c325b" }
+orchard = { git = "https://github.com/Near-One/orchard", rev = "a43977f07e6fdadff214bb081a481756a28b41fc", default-features = false }
+bip0039 = "0.12.0"
+zcash_keys = "0.12.0"
+ripemd = "0.1.3"
 
 [patch.crates-io.curve25519-dalek]
 git = "https://github.com/solana-labs/curve25519-dalek.git"

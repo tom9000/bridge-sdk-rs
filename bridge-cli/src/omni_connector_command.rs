@@ -227,7 +227,7 @@ pub enum OmniConnectorSubCommand {
     #[clap(about = "Initialize a transfer on NEAR")]
     NearInitTransfer {
         #[clap(short, long, help = "Token to transfer")]
-        token: String,
+        token: AccountId,
         #[clap(short, long, help = "Amount to transfer")]
         amount: u128,
         #[clap(short, long, help = "Recipient address on the destination chain")]
@@ -588,6 +588,13 @@ pub enum InternalSubCommand {
         #[command(flatten)]
         config_cli: CliConfig,
     },
+    #[clap(about = "Get Solana token vault (locker) PDA")]
+    SolanaGetTokenVault {
+        #[clap(short, long, help = "Token mint address")]
+        token: String,
+        #[command(flatten)]
+        config_cli: CliConfig,
+    },
 }
 
 #[allow(clippy::too_many_lines)]
@@ -732,7 +739,7 @@ pub async fn match_subcommand(cmd: OmniConnectorSubCommand, network: Network) {
         } => {
             let combined_config = combined_config(config_cli.clone(), network);
 
-            let (fee, native_fee, gas_fee) = match (fee, native_fee) {
+            let (_, native_fee, gas_fee) = match (fee, native_fee) {
                 (Some(f), Some(nf)) => (f, nf, None),
                 (Some(f), None) => (f, 0, None),
                 (None, Some(nf)) => (0, nf, None),
@@ -740,24 +747,18 @@ pub async fn match_subcommand(cmd: OmniConnectorSubCommand, network: Network) {
                     let api_url = combined_config
                         .bridge_indexer_api_url
                         .as_deref()
-                        .expect(
-                            "Getting fee: bridge_indexer_api_url not available",
-                        );
+                        .expect("Getting fee: bridge_indexer_api_url not available");
 
                     let sender = combined_config
                         .near_signer
                         .as_deref()
-                        .expect(
-                            "Getting fee: near_signer not available",
-                        )
+                        .expect("Getting fee: near_signer not available")
                         .parse()
                         .map(OmniAddress::Near)
                         .map(|addr| addr.to_string())
                         .expect("Getting fee: failed to parse near_signer");
 
-                    let token_addr: OmniAddress = token
-                        .parse()
-                        .expect("Getting fee: failed to parse token");
+                    let token_addr = OmniAddress::Near(token.clone());
                     fetch_indexer_fees(api_url, sender, token_addr.to_string(), amount, &recipient)
                         .await
                         .expect("Failed to get fee from indexer")
@@ -778,7 +779,7 @@ pub async fn match_subcommand(cmd: OmniConnectorSubCommand, network: Network) {
                     token,
                     amount,
                     recipient,
-                    fee: Some(fee),
+                    fee: None,
                     native_fee: Some(native_fee),
                     message,
                     transaction_options: TransactionOptions::default(),
@@ -1255,6 +1256,12 @@ pub async fn match_subcommand(cmd: OmniConnectorSubCommand, network: Network) {
 
                 tracing::info!("Near Tx Hash: {tx_hash}");
             }
+            InternalSubCommand::SolanaGetTokenVault { token, config_cli } => {
+                omni_connector(network, config_cli)
+                    .solana_get_token_vault(token.parse().unwrap())
+                    .await
+                    .unwrap();
+            }
         },
     }
 }
@@ -1455,6 +1462,7 @@ fn omni_connector(network: Network, cli_config: CliConfig) -> OmniConnector {
         .eth_light_client(Some(eth_light_client))
         .btc_light_client(Some(btc_light_client))
         .zcash_light_client(Some(zcash_light_client))
+        .enable_orchard(combined_config.enable_orchard)
         .build()
         .unwrap()
 }
