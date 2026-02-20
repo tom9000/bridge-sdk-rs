@@ -769,7 +769,7 @@ pub async fn match_subcommand(cmd: OmniConnectorSubCommand, network: Network) {
                 && matches!(recipient.get_chain(), ChainKind::Btc | ChainKind::Zcash)
             {
                 if let Some(gas_fee) = gas_fee {
-                    message = format_max_gas_fee(gas_fee as u64);
+                    message = format_max_gas_fee(u64::try_from(gas_fee).unwrap());
                 }
             }
 
